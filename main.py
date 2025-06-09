@@ -10,9 +10,8 @@ class App(tk.Tk):
         
         
         #drop down combobox
-        options = ["Option 1", "Option 2", "Option 3"]
-        self.dropdown = ttk.Combobox(self, values=options)
-        self.dropdown.current(0)  # Set default selection
+        self.dropdown = ttk.Combobox(self, state="readonly")
+        #self.dropdown.current(0)  # Set default selection
         self.dropdown.pack(pady=10)
         
         
@@ -20,13 +19,20 @@ class App(tk.Tk):
         button_frame = tk.Frame(self)
         button_frame.pack(pady=10)
         
-        self.controller = Controller()
+        #self.controller = Controller()
         
-        start_btb = tk.Button(button_frame, text="Start", command=self.controller.start)
+        start_btb = tk.Button(button_frame, text="Start", command= lambda: self.controller.start())
         start_btb.pack(side=tk.LEFT, padx=5)
         
-        stop_btn = tk.Button(button_frame, text="Stop", command=self.controller.stop)
+        stop_btn = tk.Button(button_frame, text="Stop", command=lambda: self.controller.stop())
         stop_btn.pack(side=tk.LEFT, padx=5)
+        
+        self.controller = Controller(self)
+        self.controller.populate_dropdown()
+        
+    def get_selected_device(self):
+        """Get the currently selected device from the dropdown."""
+        return self.dropdown.get()
         
 if __name__ == "__main__":
     app = App()
