@@ -1,6 +1,6 @@
 from utilities.device_search import DeviceSearch
 from STT.stt import STT
-
+from text_to_speech.tts import TTSWrapper
 class Controller:
     def __init__(self, gui):
         self.gui = gui
@@ -26,8 +26,15 @@ class Controller:
         #print(f"Controller started: selected device is {sel}")
         
         try:
+            tts = TTSWrapper(model_name="tts_models/en/vctk/vits", gpu=False)
             text = self.stt.transcribe(sel)
+            
+            tts.speak(text, speaker_idx=1)
+             
+            
+            
             print(f"Transcribed text: {text}")
+
         except Exception as e:
             print(f"Error: {e}")
         
