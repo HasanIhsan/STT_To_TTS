@@ -26,14 +26,18 @@ class Controller:
         #print(f"Controller started: selected device is {sel}")
         
         try:
-            tts = TTSWrapper(model_name="tts_models/en/vctk/vits", gpu=False)
-            text = self.stt.transcribe(sel)
             
-            tts.speak(text, speaker_idx=1)
-             
-            
-            
-            print(f"Transcribed text: {text}")
+            while True:
+                tts = TTSWrapper(model_name="tts_models/en/vctk/vits", gpu=False)
+                text = self.stt.transcribe(sel)
+
+                if text == "sleep":
+                    print("Stopping transcription...")
+                    break
+                
+                tts.speak(text, speaker_idx=1)
+
+                print(f"Transcribed text: {text}")
 
         except Exception as e:
             print(f"Error: {e}")

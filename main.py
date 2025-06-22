@@ -24,8 +24,7 @@ class App(tk.Tk):
         start_btb = tk.Button(button_frame, text="Start", command= lambda: self.controller.start())
         start_btb.pack(side=tk.LEFT, padx=5)
         
-        stop_btn = tk.Button(button_frame, text="Stop", command=lambda: self.controller.stop())
-        stop_btn.pack(side=tk.LEFT, padx=5)
+ 
         
         self.controller = Controller(self)
         self.controller.populate_dropdown()
