@@ -1,11 +1,21 @@
+
 from utilities.device_search import DeviceSearch
-from STT.stt import STT
-from text_to_speech.tts import TTSWrapper
+#from STT.stt import STT
+from STT.stt_realtime import STT
+#from text_to_speech.tts import TTSWrapper
+
+from text_to_speech.tts_realtime import TTSWrapper
+
+import threading
+import time
+
 class Controller:
     def __init__(self, gui):
         self.gui = gui
         self.device_search = DeviceSearch()
         self.stt = STT()
+        self.active = False
+        self.lock = threading.Lock()
     
     def populate_dropdown(self):
         # populate the dropdown with available input devices
@@ -21,26 +31,72 @@ class Controller:
         if devices:
             self.gui.dropdown.current(0)
     
+    def stt_callback(self, text: str):
+        """Handle transcribed text from STT"""
+        with self.lock:
+            if not self.active:
+                return
+                
+        # Only process non-empty results
+        if text.strip():
+            print(f"Transcribed: {text}")
+            
+            # Handle stop command
+            if "sleep" in text.lower():
+                print("Sleep command detected, stopping...")
+                self.stop()
+            
     def start(self):
         sel = self.gui.get_selected_device()
         #print(f"Controller started: selected device is {sel}")
         
-        try:
+        with self.lock:
+            if self.active:
+                return
+            self.active = True
             
-            while True:
-                tts = TTSWrapper(model_name="tts_models/en/vctk/vits", gpu=False)
+        try:
+            """tts = TTSWrapper(
+                #model_name="tts_models/multilingual/multi-dataset/xtts_v2",
+                gpu=False,
+                voice_reference="voices/mother.wav"
+            )
+            """
+            
+            # Start STT in a separate thread to avoid blocking GUI
+            threading.Thread(
+                target=self.stt.start_listening,
+                args=(sel, self.stt_callback),
+                daemon=True
+            ).start()
+            
+            #tts.speak("Hello world, this is my custom cloned voice", speed_ratio=1.2)
+            
+            # Update GUI state
+            #self.gui.set_ui_state(active=True)
+            print("Controller started")
+            
+        except Exception as e:
+            #self.gui.show_error(str(e))
+            self.stop()
+            
+        """ while True:
+                #tts = TTSWrapper( model_name="tts_models/multilingual/multi-dataset/xtts_v2", gpu=False)
+                
+                #custom_voice = "voices/mother.wav"
+                
                 text = self.stt.transcribe(sel)
 
                 if text == "sleep":
                     print("Stopping transcription...")
                     break
                 
-                tts.speak(text, speaker_idx=1)
+                #tts.speak("Hello world", speaker_idx=1, speaker_wav=custom_voice, pitch_shift=1.0, speed_ratio=1.0)
 
-                print(f"Transcribed text: {text}")
+                print(f"Transcribed text: {text}") 
 
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error: {e}")"""
         
     def stop(self):
         print("Controller stopped")

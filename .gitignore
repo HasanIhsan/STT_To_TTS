@@ -3,3 +3,7 @@
 /.vscode
 /STT/__pycache__
 /text_to_speech/__pycache__
+/voices/mother.wav
+realtimesst.log
+/models
+requirements.txt

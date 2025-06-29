@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from controller.controller import Controller
+import multiprocessing
 
 class App(tk.Tk):
     def __init__(self):
@@ -32,7 +33,9 @@ class App(tk.Tk):
     def get_selected_device(self):
         """Get the currently selected device from the dropdown."""
         return self.dropdown.get()
+   
         
 if __name__ == "__main__":
+    multiprocessing.freeze_support()
     app = App()
     app.mainloop()
