@@ -4,7 +4,7 @@ if __name__ == "__main__":
     from RealtimeTTS import TextToAudioStream, CoquiEngine
     import os
     
-    VOICE_PATH = "voices/mother.wav"
+    VOICE_PATH = "../voices/mother.wav"  
     if not os.path.exists(VOICE_PATH):
         print(f"Voice file not found: {VOICE_PATH}")
         # List available files for debugging

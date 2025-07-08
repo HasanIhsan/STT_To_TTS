@@ -1,7 +1,7 @@
 
 from utilities.device_search import DeviceSearch
 #from STT.stt import STT
-from STT.stt_realtime import STT
+#from STT.stt_realtime import STT
 #from text_to_speech.tts import TTSWrapper
 
 from text_to_speech.tts_realtime import TTSWrapper
@@ -13,7 +13,7 @@ class Controller:
     def __init__(self, gui):
         self.gui = gui
         self.device_search = DeviceSearch()
-        self.stt = STT()
+        #self.stt = STT()
         self.active = False
         self.lock = threading.Lock()
     
@@ -56,21 +56,21 @@ class Controller:
             self.active = True
             
         try:
-            """tts = TTSWrapper(
+            tts = TTSWrapper(
                 #model_name="tts_models/multilingual/multi-dataset/xtts_v2",
                 gpu=False,
                 voice_reference="voices/mother.wav"
             )
-            """
+            
             
             # Start STT in a separate thread to avoid blocking GUI
-            threading.Thread(
+            """threading.Thread(
                 target=self.stt.start_listening,
                 args=(sel, self.stt_callback),
                 daemon=True
-            ).start()
+            ).start()"""
             
-            #tts.speak("Hello world, this is my custom cloned voice", speed_ratio=1.2)
+            tts.speak("Hello world, this is my custom cloned voice", speed_ratio=1.2)
             
             # Update GUI state
             #self.gui.set_ui_state(active=True)
