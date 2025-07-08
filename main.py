@@ -7,13 +7,19 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("simple gui")
-        self.geometry("300x200")
+        self.geometry("300x400")
         
         
         #drop down combobox
         self.dropdown = ttk.Combobox(self, state="readonly")
         #self.dropdown.current(0)  # Set default selection
         self.dropdown.pack(pady=10)
+        
+        self.Entry = tk.Text(self, height=10, width=25, bg="lightyellow")
+        self.tts_btn = tk.Button(self, text="Speak", command=lambda: self.controller.tts_test())
+        self.Entry.pack(pady=10)
+        self.tts_btn.pack(pady=5)
+        
         
         
         #start and stop buttons

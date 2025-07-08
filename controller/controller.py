@@ -16,6 +16,8 @@ class Controller:
         #self.stt = STT()
         self.active = False
         self.lock = threading.Lock()
+        
+        
     
     def populate_dropdown(self):
         # populate the dropdown with available input devices
@@ -45,7 +47,25 @@ class Controller:
             if "sleep" in text.lower():
                 print("Sleep command detected, stopping...")
                 self.stop()
+       
+    # a fuction for the tts_btn
+    def tts_test(self):
+        """Test TTS functionality"""
+        try:
+            input_txt = self.gui.Entry.get("1.0", "end-1c").strip()
             
+            tts = TTSWrapper(
+                #model_name="tts_models/multilingual/multi-dataset/xtts_v2",
+                gpu=False,
+                voice_reference="voices/mother.wav"
+            )
+            tts.speak(input_txt, speed_ratio=1.2)
+            
+            print(f"TTS speaking: {input_txt}")
+        except Exception as e:
+            print(f"TTS error: {e}")
+    
+         
     def start(self):
         sel = self.gui.get_selected_device()
         #print(f"Controller started: selected device is {sel}")

@@ -55,8 +55,6 @@ class TTSWrapper:
         :param text: Text to speak
         :param speed_ratio: Speed adjustment (1.0 = normal speed)
         """
-        # Set speed adjustment
-        self.engine.set_speed(speed_ratio)
         
         # Clear any existing text in the stream
         self.stream.stop()
@@ -70,8 +68,7 @@ class TTSWrapper:
         start_time = time.time()
         self.stream.play_async()
         
-        # Block until playback completes
-        self.stream.wait_until_done()
+        
         
         end_time = time.time()
         duration = end_time - start_time
