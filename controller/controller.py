@@ -1,6 +1,6 @@
 
 from utilities.device_search import DeviceSearch
-#from STT.stt import STT
+from STT.stt import STT
 #from STT.stt_realtime import STT
 #from text_to_speech.tts import TTSWrapper
 
@@ -13,7 +13,7 @@ class Controller:
     def __init__(self, gui):
         self.gui = gui
         self.device_search = DeviceSearch()
-        #self.stt = STT()
+        self.stt = STT()
         self.active = False
         self.lock = threading.Lock()
         
@@ -33,8 +33,8 @@ class Controller:
         if devices:
             self.gui.dropdown.current(0)
     
-    def stt_callback(self, text: str):
-        """Handle transcribed text from STT"""
+    """def stt_callback(self, text: str):
+       #Handle transcribed text from STT
         with self.lock:
             if not self.active:
                 return
@@ -46,7 +46,7 @@ class Controller:
             # Handle stop command
             if "sleep" in text.lower():
                 print("Sleep command detected, stopping...")
-                self.stop()
+                self.stop()"""
        
     # a fuction for the tts_btn
     def tts_test(self):
@@ -82,19 +82,30 @@ class Controller:
                 voice_reference="voices/mother.wav"
             )
             
+            while True:
+                #tts = TTSWrapper( model_name="tts_models/multilingual/multi-dataset/xtts_v2", gpu=False)
+                
+                #custom_voice = "voices/mother.wav"
+                
+                text = self.stt.transcribe(sel)
+
+                if text == "sleep":
+                    print("Stopping transcription...")
+                    break
+                
+                #tts.speak("Hello world", speaker_idx=1, speaker_wav=custom_voice, pitch_shift=1.0, speed_ratio=1.0)
+
+                print(f"Transcribed text: {text}") 
+
+         
             
-            # Start STT in a separate thread to avoid blocking GUI
-            """threading.Thread(
-                target=self.stt.start_listening,
-                args=(sel, self.stt_callback),
-                daemon=True
-            ).start()"""
+          
             
-            tts.speak("Hello world, this is my custom cloned voice", speed_ratio=1.2)
-            
-            # Update GUI state
-            #self.gui.set_ui_state(active=True)
-            print("Controller started")
+                tts.speak(text, speed_ratio=1.2)
+                
+                # Update GUI state
+                #self.gui.set_ui_state(active=True)
+                print("Controller started")
             
         except Exception as e:
             #self.gui.show_error(str(e))
